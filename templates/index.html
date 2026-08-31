@@ -5,19 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
+
     <title>AI SENTINEL</title>
 </head>
+
 <body>
-    <header>
-    </header>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <h1>AI Sentinel</h1>
+            <p class="subtitle">Secure Internal AI Assistant</p>
 
-<main>
-    <h1>AI Sentinel</h1>
-    <p>Secure Internal AI Assistant</p>
-</main>
+            <nav>
+                <a href="#">Assistant</a>
+                <a href="#">Knowledge Base</a>
+                <a href="#">Activity Logs</a>
+            </nav>
+        </aside>
 
-    <footer>
-    </footer>
+        <main class="main-panel">
+            <section class="assistant-panel">
+                <h2>Assistant</h2>
+                <p>Ask Sentinel a question about internal company information.</p>
+
+                <form>
+                    <textarea placeholder="Ask Sentinel..."></textarea>
+                    <button type="submit">Send</button>
+                </form>
+            </section>
+        </main>
+    </div>
 </body>
+
 </html>
