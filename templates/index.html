@@ -23,15 +23,24 @@
         </aside>
 
         <main class="main-panel">
+            
             <section class="assistant-panel">
                 <h2>Assistant</h2>
                 <p>Ask Sentinel a question about internal company information.</p>
 
-                <form>
-                    <textarea placeholder="Ask Sentinel..."></textarea>
+                <form method="POST">
+                    <textarea name="message" placeholder="Ask Sentinel..."></textarea>
                     <button type="submit">Send</button>
                 </form>
+
+                {% if response %}
+                    <div class="response">
+                        <h3>Sentinel</h3>
+                        <p>{{ response }}</p>
+                    </div>
+                {% endif %}
             </section>
+
         </main>
     </div>
 </body>
