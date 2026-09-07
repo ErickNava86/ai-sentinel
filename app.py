@@ -79,6 +79,7 @@ chunk_embeddings = [
 @app.route("/", methods=["GET", "POST"])
 def index():
     response = None
+    sources = None
 
     if request.method == "POST":
         user_message = request.form.get("message")
@@ -88,35 +89,39 @@ def index():
             chunk_embeddings
         )
 
-        relevant_context = "\n\n".join(relevant_chunks)
+        if not relevant_chunks:
+            response = "I could not find that information in the company knowledge base."
 
-        try:
-            ai_response = client.responses.create(
-                model="gpt-5.6-luna",
-                input=f"""
-                    You are AI Sentinel, an internal company assistant.
+        else:
+            relevant_context = "\n\n".join(relevant_chunks)
+            sources = [
+                chunk.splitlines()[0]
+                for chunk in relevant_chunks
+            ]
 
-                    Answer the employee's question using ONLY the company information
-                    provided below.
+            try:
+                ai_response = client.responses.create(
+                    model="gpt-5.6-luna",
+                    input=f"""
+                        You are AI Sentinel, an internal company assistant.
+                        Answer the employee's question using ONLY the company information
+                        provided below.
+                        If the answer cannot be found in the company information, say:
+                        "I could not find that information in the company knowledge base."
+                        COMPANY INFORMATION:
+                        {relevant_context}
+                        EMPLOYEE QUESTION:
+                        {user_message}
+                        """
+                    )
 
-                    If the answer cannot be found in the company information, say:
-                    "I could not find that information in the company knowledge base."
+                response = ai_response.output_text
 
-                    COMPANY INFORMATION:
-                    {relevant_context}
+            except Exception as error:
+                print(f"OpenAI API error: {error}")
+                response="Sentinel is temporarily unavailable. Please try again later."
 
-                    EMPLOYEE QUESTION:
-                    {user_message}
-                    """
-                )
-
-            response = ai_response.output_text
-
-        except Exception as error:
-            print(f"OpenAI API error: {error}")
-            response="Sentinel is temporarily unavailable. Please try again later."
-
-    return render_template("index.html", response=response)
+    return render_template("index.html", response=response, sources=sources)
 
 
 # -------------- START APPLICATION -----------------

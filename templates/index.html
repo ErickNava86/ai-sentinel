@@ -37,6 +37,15 @@
                     <div class="response">
                         <h3>Sentinel</h3>
                         <p>{{ response }}</p>
+                        {% if sources %}
+                            <div class="sources">
+                                <strong>Source:</strong>
+
+                                {% for source in sources %}
+                                    <span>{{ source }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 {% endif %}
             </section>
