@@ -5,19 +5,34 @@ from flask import Flask, render_template, request
 from openai import OpenAI
 from dotenv import load_dotenv
 from pathlib import Path
-
-
-# ---------- SET UP ------------
-
-
-app = Flask(__name__)
-
-load_dotenv()
-client = OpenAI()
+from datetime import datetime
+import json
 
 
 # ------- FUNCTIONS ------------
 
+
+def load_activity_logs():
+    try:
+        with open("activity_logs.json", "r") as file:
+            return json.load(file)
+
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def save_activity_logs():
+    with open("activity_logs.json", "w") as file:
+        json.dump(activity_logs, file, indent=4)
+
+def add_activity_log(question, source, status):
+    activity_logs.append({
+        "time": datetime.now().strftime("%m/%d/%Y %I:%M %p"),
+        "question": question,
+        "source": source,
+        "status": status
+    })
+    
+    save_activity_logs()
 
 def get_embedding(text):
     response = client.embeddings.create(
@@ -35,7 +50,7 @@ def cosine_similarity(vector_a, vector_b):
 
     return dot_product / (magnitude_a * magnitude_b)
 
-def retrieve_relevant_chunks(question, chunks, embeddings, limit=2):
+def retrieve_relevant_chunks(question, chunks, embeddings, limit=1):
     question_embedding = get_embedding(question)
 
     scored_chunks = []
@@ -58,6 +73,17 @@ def retrieve_relevant_chunks(question, chunks, embeddings, limit=2):
         for score, chunk in scored_chunks[:limit]
         if score >= 0.30
     ]
+
+
+# ---------- SET UP ------------
+
+
+app = Flask(__name__)
+
+load_dotenv()
+client = OpenAI()
+
+activity_logs = load_activity_logs()
 
 
 # ------------ KNOWLEDGE BASE -------------------
@@ -92,6 +118,12 @@ def index():
         if not relevant_chunks:
             response = "I could not find that information in the company knowledge base."
 
+            add_activity_log(
+                user_message,
+                "None",
+                "No relevant knowledge"
+            )
+
         else:
             relevant_context = "\n\n".join(relevant_chunks)
             sources = [
@@ -117,9 +149,21 @@ def index():
 
                 response = ai_response.output_text
 
+                add_activity_log(
+                    user_message,
+                    sources,
+                    "Success"
+                )
+
             except Exception as error:
                 print(f"OpenAI API error: {error}")
                 response="Sentinel is temporarily unavailable. Please try again later."
+
+                add_activity_log(
+                    user_message,
+                    sources,
+                    "Error"
+                )
 
     return render_template("index.html", response=response, sources=sources)
 
@@ -136,6 +180,14 @@ def knowledge_base():
     return render_template(
         "knowledge.html",
         documents=documents
+    )
+
+
+@app.route("/logs")
+def activity_logs_page():
+    return render_template(
+        "logs.html",
+        logs=activity_logs
     )
 
 

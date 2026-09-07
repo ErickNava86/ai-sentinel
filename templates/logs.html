@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+Activity Logs - AI Sentinel
+{% endblock %}
+
+{% block content %}
+
+<section class="activity-panel">
+
+    <h2>Activity Logs</h2>
+    <p>Recent Sentinel activity and retrieval results.</p>
+
+    <div class="activity-list">
+
+        {% for log in logs %}
+
+            <div class="activity-card">
+                <h3>{{ log.status }}</h3>
+
+                <p><strong>Time:</strong> {{ log.time }}</p>
+                <p><strong>Question:</strong> {{ log.question }}</p>
+                <p><strong>Source:</strong> {{ log.source }}</p>
+            </div>
+
+        {% else %}
+
+            <p>No activity has been recorded yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}
