@@ -1,57 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% block title %}
+Assistant - AI Sentinel
+{% endblock %}
 
-    <title>AI SENTINEL</title>
-</head>
+{% block content %}
 
-<body>
-    <div class="app-shell">
-        <aside class="sidebar">
-            <h1>AI Sentinel</h1>
-            <p class="subtitle">Secure Internal AI Assistant</p>
+<section class="assistant-panel">
 
-            <nav>
-                <a href="#">Assistant</a>
-                <a href="#">Knowledge Base</a>
-                <a href="#">Activity Logs</a>
-            </nav>
-        </aside>
+    <h2>Assistant</h2>
+    <p>Ask Sentinel a question about internal company information.</p>
 
-        <main class="main-panel">
-            
-            <section class="assistant-panel">
-                <h2>Assistant</h2>
-                <p>Ask Sentinel a question about internal company information.</p>
+    <form method="POST">
+        <textarea
+            name="message"
+            placeholder="Ask Sentinel..."
+        ></textarea>
 
-                <form method="POST">
-                    <textarea name="message" placeholder="Ask Sentinel..."></textarea>
-                    <button type="submit">Send</button>
-                </form>
+        <button type="submit">Send</button>
+    </form>
 
-                {% if response %}
-                    <div class="response">
-                        <h3>Sentinel</h3>
-                        <p>{{ response }}</p>
-                        {% if sources %}
-                            <div class="sources">
-                                <strong>Source:</strong>
+    {% if response %}
+        <div class="response">
+            <h3>Sentinel</h3>
+            <p>{{ response }}</p>
 
-                                {% for source in sources %}
-                                    <span>{{ source }}</span>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endif %}
-            </section>
+            {% if source %}
+                <p><strong>Source:</strong> {{ source }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
 
-        </main>
-    </div>
-</body>
+</section>
 
-</html>
+{% endblock %}

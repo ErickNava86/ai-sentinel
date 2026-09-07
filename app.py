@@ -124,6 +124,21 @@ def index():
     return render_template("index.html", response=response, sources=sources)
 
 
+@app.route("/knowledge")
+def knowledge_base():
+    documents = [
+        {
+            "name": knowledge_path.name,
+            "chunks": len(knowledge_chunks)
+        }
+    ]
+
+    return render_template(
+        "knowledge.html",
+        documents=documents
+    )
+
+
 # -------------- START APPLICATION -----------------
 
 

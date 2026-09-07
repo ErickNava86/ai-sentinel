@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+Knowledge Base - AI Sentinel
+{% endblock %}
+
+{% block content %}
+
+    <h2>Knowledge Base</h2>
+
+    <p>
+        Documents currently available to Sentinel for retrieval.
+    </p>
+
+    <div class="document-list">
+
+        {% for document in documents %}
+
+            <div class="document-card">
+                <h3>{{ document.name }}</h3>
+                <p>{{ document.chunks }} knowledge chunks</p>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
