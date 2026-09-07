@@ -1,0 +1,23 @@
+SENTINEL TECHNOLOGIES - EMPLOYEE POLICIES
+
+VACATION POLICY
+Full-time employees receive 15 paid vacation days per year.
+Vacation requests should be submitted at least 14 days in advance.
+
+REMOTE WORK POLICY
+Employees may work remotely up to three days per week.
+Remote employees must be available during core business hours from
+9:00 AM to 3:00 PM Pacific Time.
+
+PASSWORD POLICY
+Company passwords must contain at least 12 characters.
+Passwords must include uppercase and lowercase letters, a number,
+and a special character.
+
+SECURITY INCIDENTS
+Employees who suspect a security incident must immediately contact
+the IT Security Team at security@sentinel.example.
+
+EQUIPMENT POLICY
+Company laptops and other equipment remain the property of
+Sentinel Technologies and must be returned when employment ends.
